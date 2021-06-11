@@ -2,10 +2,13 @@ import cv2
 import time
 import mediapipe as mp
 
-cap = cv2.VideoCapture('Sample/video1.mp4')
+cap = cv2.VideoCapture('Sample/video.mp4')
 
 mpObjectron = mp.solutions.objectron
-objectron = mpObjectron.Objectron()
+objectron = mpObjectron.Objectron(static_image_mode=True,
+                            max_num_objects=5,
+                            min_detection_confidence=0.5,
+                            model_name='Camera')
 mpDraw = mp.solutions.drawing_utils
 
 c_time = 0
@@ -19,7 +22,6 @@ while True:
     if results.detected_objects:
         for detected_object in results.detected_objects:
             mpDraw.draw_landmarks(img, detected_object.landmarks_2d, mpObjectron.BOX_CONNECTIONS)
-            # mpDraw.draw_axis(img, detected_object.rotation, detected_object.translation)
 
     c_time = time.time()
     fps = 1/(c_time-p_time)
